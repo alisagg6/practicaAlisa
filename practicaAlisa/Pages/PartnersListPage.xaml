@@ -8,133 +8,73 @@
       Title="Партнеры - Комфорт"
       Background="White">
 
-    <Grid Margin="10">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Список партнеров" FontSize="28" FontWeight="Bold" 
-                   HorizontalAlignment="Center" Margin="0,0,0,20"
-                   Foreground="#355CBD"/>
-
-        <Border Grid.Row="1" Background="#D2DFFF" Padding="10" Margin="0,0,0,10" CornerRadius="5">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <TextBlock Text="Поиск:" VerticalAlignment="Center" FontSize="14" 
-                               FontWeight="Bold"/>
-                    <TextBox x:Name="SearchBox" Width="250" Height="30" 
-                             TextChanged="SearchBox_TextChanged"
-                             FontSize="12" Margin="5,0"/>
-                </StackPanel>
-
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0">
-                    <TextBlock Text="Сортировка:" VerticalAlignment="Center" FontSize="14" 
-                               FontWeight="Bold"/>
-                    <ComboBox x:Name="SortComboBox" Width="180" Height="30" 
-                              SelectionChanged="SortComboBox_SelectionChanged"
-                              FontSize="12" Margin="5,0">
-                        <ComboBoxItem Content="По наименованию (А-Я)"/>
-                        <ComboBoxItem Content="По наименованию (Я-А)"/>
-                        <ComboBoxItem Content="По рейтингу ↑"/>
-                        <ComboBoxItem Content="По рейтингу ↓"/>
-                        <ComboBoxItem Content="По скидке ↑"/>
-                        <ComboBoxItem Content="По скидке ↓"/>
-                    </ComboBox>
-                </StackPanel>
-            </Grid>
+        <Border Grid.Row="0" Background="#D2DFFF" Padding="10" Margin="10">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Поиск:" VerticalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+                <TextBox x:Name="SearchBox" Width="200" Height="30" TextChanged="SearchBox_TextChanged" Margin="5,0"/>
+                <TextBlock Text="Сортировка:" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Margin="20,0,0,0"/>
+                <ComboBox x:Name="SortComboBox" Width="150" Height="30" SelectionChanged="SortComboBox_SelectionChanged" Margin="5,0">
+                    <ComboBoxItem Content="По имени (А-Я)"/>
+                    <ComboBoxItem Content="По имени (Я-А)"/>
+                    <ComboBoxItem Content="По рейтингу ↑"/>
+                    <ComboBoxItem Content="По рейтингу ↓"/>
+                </ComboBox>
+            </StackPanel>
         </Border>
 
-        <ListView x:Name="PartnersLV" Grid.Row="2" SelectionMode="Single">
+        <ListView x:Name="PartnersLW" Grid.Row="1" FontSize="20">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#D2DFFF" BorderThickness="1" 
-                            Margin="5" CornerRadius="5" Background="White">
-                        <Grid Margin="10">
+                    <Border BorderBrush="Black"
+                        BorderThickness="1" Margin="10">
+                        <Grid Margin="10" Width="700">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding TypeOfBusiness.NameBusiness}"/>
+                                <TextBlock Text=" | "/>
+                                <TextBlock Text="{Binding NamePartner}"/>
 
-                            <StackPanel Width="1200" Height="80" Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                <TextBlock FontSize="14" FontWeight="Bold" Foreground="#355CBD">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} | {1}">
-                                            <Binding Path="TypeOfBusiness.NameBusiness"/>
-                                            <Binding Path="NamePartner"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
                             </StackPanel>
 
-                            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                <TextBlock FontSize="12">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} {1} {2}">
-                                            <Binding Path="SurnameDirector"/>
-                                            <Binding Path="NameDirector"/>
-                                            <Binding Path="PatronumicDirector"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock Text="{Binding SurnameDirector}"/>
+                                <TextBlock Text="{Binding NameDirector}"/>
+                                <TextBlock Text="{Binding PatronumicDirector}"/>
                             </StackPanel>
-
-                            <TextBlock Grid.Row="2" Text="{Binding Phone}" FontSize="12" Foreground="Gray"/>
-
-                            <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                <TextBlock Text="Рейтинг:" FontSize="12" Foreground="Gray"/>
-                                <TextBlock Text="{Binding Raiting}" FontSize="12" FontWeight="Bold" Foreground="Gold"/>
-                            </StackPanel>
-
-                            <Border Grid.Row="1" Grid.Column="1" Background="#355CBD" CornerRadius="10" 
-                                    Padding="10,5" VerticalAlignment="Center">
-                                <TextBlock Foreground="White" FontSize="14" FontWeight="Bold">
-                                    <TextBlock.Text>
-                                        <Binding Path="SizeDiscount"/>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Border>
-
-                            <Button Grid.Row="3" Grid.Column="1" Content="История продаж" 
-                                    Width="100" Height="40" FontSize="5"
-                                    Background="#D2DFFF" Foreground="#355CBD"
-                                    Click="ShowHistory_Click"
-                                    Tag="{Binding Id_partner}"/>
+                            <TextBlock Grid.Row="2" Text="{Binding Phone}"/>
+                            <TextBlock Grid.Row="3" Text="{Binding Raiting}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Text="{Binding SizeDiscount}"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <Border Grid.Row="3" Background="#D2DFFF" Padding="10" Margin="0,10,0,0" CornerRadius="5">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button x:Name="AddBtn" Content="Добавить партнера" Width="180" Height="40" FontSize="14"
-                        Background="#355CBD" Foreground="White" Click="AddBtn_Click"/>
-                <Button x:Name="EditBtn" Content="Редактировать" Width="150" Height="40" FontSize="14"
-                        Background="#355CBD" Foreground="White" Click="EditBtn_Click" Margin="10,0,0,0"/>
-                <Button x:Name="DeleteBtn" Content="Удалить" Width="120" Height="40" FontSize="14"
-                        Background="#FF5555" Foreground="White" Click="DeleteBtn_Click" Margin="10,0,0,0"/>
-                <Button x:Name="RefreshBtn" Content="Обновить" Width="120" Height="40" FontSize="14"
-                        Background="#355CBD" Foreground="White" Click="RefreshBtn_Click" Margin="10,0,0,0"/>
-                <Button x:Name="LogoutBtn" Content="Выход" Width="100" Height="40" FontSize="14"
-                        Background="Gray" Foreground="White" Click="LogoutBtn_Click" Margin="10,0,0,0"/>
-            </StackPanel>
-        </Border>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="10">
+            <Button Click="AddBtn_Click" Background="#355CBD" x:Name="AddBtn" Width="100" Height="35" Margin="5">Добавить</Button>
+            <Button Click="EditBtn_Click" Background="#355CBD" x:Name="EditBtn" Width="100" Height="35" Margin="5">Изменить</Button>
+            <Button Click="DeleteBtn_Click" x:Name="DeleteBtn" Width="100" Height="35" Margin="5" Background="#FF5555">Удалить</Button>
+            <Button Click="HistoryBtn_Click" Background="#355CBD" x:Name="HistoryBtn" Width="120" Height="35" Margin="5">История продаж</Button>
+            <Button Click="LogoutBtn_Click" Background="#355CBD" x:Name="LogoutBtn" Width="100" Height="35" Margin="5">Выход</Button>
+        </StackPanel>
 
-        <TextBlock Grid.Row="4" x:Name="StatusText" Text="Готово" FontSize="10" Margin="5" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Row="2" x:Name="StatusText" Text="Готово" FontSize="10" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

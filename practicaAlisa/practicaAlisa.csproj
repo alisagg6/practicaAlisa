@@ -97,7 +97,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MaterialCalculator.cs" />
     <Compile Include="Model\ConnectionClass.cs" />
     <Compile Include="Model\DiscountPartners.cs">
       <DependentUpon>Model1.tt</DependentUpon>

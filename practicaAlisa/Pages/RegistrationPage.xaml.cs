@@ -1,9 +1,9 @@
-﻿using practicaAlisa.Model;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using practicaAlisa.Model;
 
 namespace practicaAlisa.Pages
 {
@@ -22,18 +22,10 @@ namespace practicaAlisa.Pages
                 familyStatusCombo.ItemsSource = ConnectionClass.comfortEntities.FamilyStatus.ToList();
                 healthCombo.ItemsSource = ConnectionClass.comfortEntities.Health.ToList();
                 positionCombo.ItemsSource = ConnectionClass.comfortEntities.Role.ToList();
-
-                if (familyStatusCombo.Items.Count > 0)
-                    familyStatusCombo.SelectedIndex = 0;
-                if (healthCombo.Items.Count > 0)
-                    healthCombo.SelectedIndex = 0;
-                if (positionCombo.Items.Count > 0)
-                    positionCombo.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки справочников: {ex.Message}",
-                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -64,45 +56,17 @@ namespace practicaAlisa.Pages
 
             try
             {
-                var allLogins = ConnectionClass.comfortEntities.Logins.ToList();
-                var existingLogin = allLogins.FirstOrDefault(l => l.Login == login.Text.Trim());
-
-                if (existingLogin != null)
-                {
-                    MessageBox.Show("Пользователь с таким логином уже существует!",
-                        "Ошибка регистрации", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    login.Focus();
-                    return;
-                }
-
-                var allEmployees = ConnectionClass.comfortEntities.Employee.ToList();
-                var existingEmployee = allEmployees.FirstOrDefault(emp =>
-                    emp.PassportSeria == passportSeries.Text.Trim() &&
-                    emp.PassportNumber == passportNumber.Text.Trim());
-
-                if (existingEmployee != null)
-                {
-                    MessageBox.Show("Сотрудник с такими паспортными данными уже зарегистрирован!",
-                        "Ошибка регистрации", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
-                var selectedFamily = (FamilyStatus)familyStatusCombo.SelectedItem;
-                var selectedHealth = (Health)healthCombo.SelectedItem;
-                var selectedRole = (Role)positionCombo.SelectedItem;
-
                 Employee employeeObj = new Employee
                 {
                     Surname = surname.Text.Trim(),
                     Name = name.Text.Trim(),
-                    Patronumic = string.IsNullOrWhiteSpace(patronymic.Text) ? null : patronymic.Text.Trim(),
+                    Patronumic = string.IsNullOrWhiteSpace(patronymic.Text) ? " " : patronymic.Text.Trim(),
                     Birthday = birthday.SelectedDate.Value,
                     PassportSeria = passportSeries.Text.Trim(),
                     PassportNumber = passportNumber.Text.Trim(),
-                    Id_family = selectedFamily.Id_status,
-                    Id_health = selectedHealth.Id_health,
-                    Id_role = selectedRole.Id_role,
-                    BankDetails = "Не указаны"
+                    Id_family = (int)familyStatusCombo.SelectedValue,
+                    Id_health = (int)healthCombo.SelectedValue,
+                    Id_role = (int)positionCombo.SelectedValue
                 };
 
                 ConnectionClass.comfortEntities.Employee.Add(employeeObj);
@@ -118,19 +82,15 @@ namespace practicaAlisa.Pages
                 ConnectionClass.comfortEntities.Logins.Add(loginObj);
                 ConnectionClass.comfortEntities.SaveChanges();
 
-                MessageBox.Show($"Регистрация успешно завершена!\n\n" +
-                    $"Сотрудник: {employeeObj.Surname} {employeeObj.Name}\n" +
-                    $"Логин: {loginObj.Login}\n\n" +
-                    "Теперь вы можете войти в систему.",
-                    "Успешная регистрация",
+                MessageBox.Show("Данные успешно добавлены", "Уведомление",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
                 NavigationService.Navigate(new LoginPage());
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при регистрации: {ex.Message}",
-                    "Ошибка регистрации", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка регистрации",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
